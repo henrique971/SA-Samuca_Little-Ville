@@ -7,6 +7,7 @@ export default function Register() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const { signUp } = useAuth();
   const navigate = useNavigate();
@@ -18,7 +19,8 @@ export default function Register() {
 
     try {
       await signUp(name, email, password);
-      navigate("/dashboard");
+      setSuccess("Conta cadastrada com sucesso! Redirecionando para o login...");
+      setTimeout(() => navigate("/login"), 1800);
     } catch (err) {
       setError(err.response?.data?.error || "Erro ao cadastrar");
     } finally {
@@ -34,6 +36,7 @@ export default function Register() {
         <p className="subtitle">Junte-se aos moradores de Little Ville</p>
 
         {error && <div className="error-message">{error}</div>}
+        {success && <div className="success-message">{success}</div>}
 
         <div className="form-group">
           <label htmlFor="name">Nome completo</label>

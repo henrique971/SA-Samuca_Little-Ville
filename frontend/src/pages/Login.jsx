@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function Login() {
@@ -8,7 +8,9 @@ export default function Login() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { signIn } = useAuth();
+  const location = useLocation();
   const navigate = useNavigate();
+  const success = location.state?.message;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -33,6 +35,7 @@ export default function Login() {
         <p className="subtitle">Faça login para registrar avistamentos</p>
 
         {error && <div className="error-message">{error}</div>}
+        {success && <div className="success-message">{success}</div>}
 
         <div className="form-group">
           <label htmlFor="email">E-mail</label>

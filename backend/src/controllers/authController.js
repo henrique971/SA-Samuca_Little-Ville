@@ -2,6 +2,16 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "../lib/prisma.js";
 
+function createToken(userId) {
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret) {
+    throw new Error("JWT_SECRET não configurado");
+  }
+
+  return jwt.sign({ id: userId }, secret, { expiresIn: "7d" });
+}
+
 // POST /auth/register
 export async function register(req, res) {
   try {
@@ -27,9 +37,7 @@ export async function register(req, res) {
       },
     });
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = createToken(user.id);
 
     return res.status(201).json({
       user: { id: user.id, name: user.name, email: user.email },
@@ -62,9 +70,7 @@ export async function login(req, res) {
       return res.status(401).json({ error: "Credenciais inválidas" });
     }
 
-    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = createToken(user.id);
 
     return res.json({
       user: { id: user.id, name: user.name, email: user.email },

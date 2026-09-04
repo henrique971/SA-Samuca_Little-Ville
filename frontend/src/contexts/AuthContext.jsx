@@ -30,13 +30,7 @@ export function AuthProvider({ children }) {
 
   async function signUp(name, email, password) {
     const response = await api.post("/auth/register", { name, email, password });
-    const { user, token } = response.data;
-
-    localStorage.setItem("@littleville:user", JSON.stringify(user));
-    localStorage.setItem("@littleville:token", token);
-
-    setUser(user);
-    return user;
+    return response.data.user;
   }
 
   function signOut() {
