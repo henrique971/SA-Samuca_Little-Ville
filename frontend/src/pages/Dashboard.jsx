@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import api from "../services/api";
+import { useAuth } from "../contexts/AuthContext";
 import "leaflet/dist/leaflet.css";
 
 // Fix para os ícones do Leaflet não aparecerem
@@ -43,6 +44,7 @@ function MapClickHandler({ onMapClick }) {
 }
 
 export default function Dashboard() {
+  const { user } = useAuth();
   const [sightings, setSightings] = useState([]);
   const [stats, setStats] = useState({ totalSightings: 0, totalUsers: 0 });
   const [showModal, setShowModal] = useState(false);
@@ -50,6 +52,10 @@ export default function Dashboard() {
   const [newMarker, setNewMarker] = useState(null);
   const [form, setForm] = useState({ title: "", description: "", lat: "", lng: "" });
   const [loading, setLoading] = useState(false);
+
+  function canManage(sighting) {
+    return user?.role === "ADMIN" || user?.id === sighting.userId;
+  }
 
   useEffect(() => {
     loadData();
@@ -139,24 +145,25 @@ export default function Dashboard() {
   return (
     <>
       <div className="page-header">
-        <h1>🗺️ Mapa de Avistamentos</h1>
-        <p>Clique no mapa para registrar um novo avistamento em Little Ville</p>
+        <div className="eyebrow">PAINEL DE MONITORAMENTO  /  24H</div>
+        <h1>Mapa de avistamentos</h1>
+        <p>Registre uma ocorrência, acompanhe os pontos ativos e ajude a montar o arquivo de Little Ville.</p>
       </div>
 
       {/* Stats */}
       <div className="stats-grid">
         <div className="stat-card">
-          <div className="stat-icon">👣</div>
+          <div className="stat-icon">↯</div>
           <div className="stat-value">{stats.totalSightings}</div>
           <div className="stat-label">Avistamentos</div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">👥</div>
+          <div className="stat-icon">◎</div>
           <div className="stat-value">{stats.totalUsers}</div>
           <div className="stat-label">Moradores</div>
         </div>
         <div className="stat-card">
-          <div className="stat-icon">📍</div>
+          <div className="stat-icon">⌖</div>
           <div className="stat-value">{sightings.length}</div>
           <div className="stat-label">Locais Marcados</div>
         </div>
@@ -165,7 +172,7 @@ export default function Dashboard() {
       {/* Mapa */}
       <div className="map-section">
         <div className="section-header">
-          <h2>🌍 Mapa Mundi — Avistamentos</h2>
+          <h2>Mapa de ocorrências <span>• AO VIVO</span></h2>
         </div>
         <div className="map-container">
           <MapContainer
@@ -209,7 +216,7 @@ export default function Dashboard() {
 
       {/* Tabela de Avistamentos */}
       <div className="section-header">
-        <h2>📋 Avistamentos Registrados</h2>
+        <h2>Avistamentos registrados</h2>
       </div>
       <div className="table-container">
         <table className="data-table">
@@ -237,8 +244,12 @@ export default function Dashboard() {
                   <td>{new Date(s.date).toLocaleDateString("pt-BR")}</td>
                   <td>{s.user?.name || "—"}</td>
                   <td className="actions">
-                    <button className="btn-edit" onClick={() => handleEdit(s)}>✏️ Editar</button>
-                    <button className="btn-delete" onClick={() => handleDelete(s.id)}>🗑️ Deletar</button>
+                    {canManage(s) && (
+                      <>
+                        <button className="btn-edit" onClick={() => handleEdit(s)}>✏️ Editar</button>
+                        <button className="btn-delete" onClick={() => handleDelete(s.id)}>🗑️ Deletar</button>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))

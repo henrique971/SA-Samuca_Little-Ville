@@ -1,12 +1,18 @@
 import { useState, useEffect } from "react";
 import api from "../services/api";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function Sightings() {
+  const { user } = useAuth();
   const [sightings, setSightings] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [editingSighting, setEditingSighting] = useState(null);
   const [form, setForm] = useState({ title: "", description: "", lat: "", lng: "" });
   const [loading, setLoading] = useState(false);
+
+  function canManage(sighting) {
+    return user?.role === "ADMIN" || user?.id === sighting.userId;
+  }
 
   useEffect(() => {
     loadSightings();
@@ -88,14 +94,15 @@ export default function Sightings() {
   return (
     <>
       <div className="page-header">
-        <h1>📋 Avistamentos</h1>
-        <p>Gerencie todos os registros de avistamentos de Little Ville</p>
+        <div className="eyebrow">ARQUIVO CENTRAL  /  REGISTROS</div>
+        <h1>Todos os avistamentos</h1>
+        <p>Consulte, edite e organize as evidências registradas pelos moradores.</p>
       </div>
 
       <div className="section-header">
-        <h2>Lista Completa</h2>
+        <h2>Lista completa</h2>
         <button className="btn btn-primary btn-sm" onClick={openCreate}>
-          + Novo Avistamento
+          + Registrar avistamento
         </button>
       </div>
 
@@ -131,8 +138,12 @@ export default function Sightings() {
                   <td>{new Date(s.date).toLocaleDateString("pt-BR")}</td>
                   <td>{s.user?.name || "—"}</td>
                   <td className="actions">
-                    <button className="btn-edit" onClick={() => handleEdit(s)}>✏️ Editar</button>
-                    <button className="btn-delete" onClick={() => handleDelete(s.id)}>🗑️ Deletar</button>
+                    {canManage(s) && (
+                      <>
+                        <button className="btn-edit" onClick={() => handleEdit(s)}>✏️ Editar</button>
+                        <button className="btn-delete" onClick={() => handleDelete(s.id)}>🗑️ Deletar</button>
+                      </>
+                    )}
                   </td>
                 </tr>
               ))

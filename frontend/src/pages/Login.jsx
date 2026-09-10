@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const { signIn } = useAuth();
@@ -18,8 +19,8 @@ export default function Login() {
     setLoading(true);
 
     try {
-      await signIn(email, password);
-      navigate("/dashboard");
+      const user = await signIn(email, password, isAdmin);
+      navigate(user.role === "ADMIN" ? "/admin" : "/dashboard");
     } catch (err) {
       setError(err.response?.data?.error || "Erro ao fazer login");
     } finally {
@@ -30,9 +31,9 @@ export default function Login() {
   return (
     <div className="auth-page">
       <form className="auth-card" onSubmit={handleSubmit}>
-        <div className="logo-icon">👣</div>
+        <div className="logo-icon">LV</div>
         <h1>Little Ville</h1>
-        <p className="subtitle">Faça login para registrar avistamentos</p>
+        <p className="subtitle">Entre para acompanhar os sinais que surgem na cidade.</p>
 
         {error && <div className="error-message">{error}</div>}
         {success && <div className="success-message">{success}</div>}
@@ -48,6 +49,11 @@ export default function Login() {
             required
           />
         </div>
+
+        <label className="check-row">
+          <input type="checkbox" checked={isAdmin} onChange={(e) => setIsAdmin(e.target.checked)} />
+          <span>Sou administrador</span>
+        </label>
 
         <div className="form-group">
           <label htmlFor="password">Senha</label>

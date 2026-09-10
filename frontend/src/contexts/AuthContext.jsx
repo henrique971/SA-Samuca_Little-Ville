@@ -17,8 +17,8 @@ export function AuthProvider({ children }) {
     setLoading(false);
   }, []);
 
-  async function signIn(email, password) {
-    const response = await api.post("/auth/login", { email, password });
+  async function signIn(email, password, isAdmin = false) {
+    const response = await api.post("/auth/login", { email, password, isAdmin });
     const { user, token } = response.data;
 
     localStorage.setItem("@littleville:user", JSON.stringify(user));
@@ -28,8 +28,8 @@ export function AuthProvider({ children }) {
     return user;
   }
 
-  async function signUp(name, email, password) {
-    const response = await api.post("/auth/register", { name, email, password });
+  async function signUp(name, email, password, isAdmin = false) {
+    const response = await api.post("/auth/register", { name, email, password, isAdmin });
     return response.data.user;
   }
 

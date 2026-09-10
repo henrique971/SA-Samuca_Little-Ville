@@ -1,10 +1,8 @@
 import jwt from "jsonwebtoken";
+import prisma from "../lib/prisma.js";
+import { authSecret } from "../lib/authSecret.js";
 
-export function authMiddleware(req, res, next) {
-  if (!process.env.JWT_SECRET) {
-    return res.status(500).json({ error: "JWT_SECRET não configurado no servidor" });
-  }
-
+export async function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -24,10 +22,25 @@ export function authMiddleware(req, res, next) {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.userId = decoded.id;
+    const decoded = jwt.verify(token, authSecret);
+    const user = await prisma.user.findUnique({ where: { id: decoded.id } });
+
+    if (!user) {
+      return res.status(401).json({ error: "Usuário não encontrado" });
+    }
+
+    req.userId = user.id;
+    req.user = user;
     return next();
   } catch (err) {
     return res.status(401).json({ error: "Token inválido" });
   }
+}
+
+export function requireAdmin(req, res, next) {
+  if (req.user?.role !== "ADMIN") {
+    return res.status(403).json({ error: "Acesso restrito ao administrador" });
+  }
+
+  return next();
 }

@@ -5,6 +5,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import Sightings from "./pages/Sightings";
 import AppLayout from "./layouts/AppLayout";
+import Admin from "./pages/Admin";
 
 function PrivateRoute({ children }) {
   const { signed, loading } = useAuth();
@@ -36,6 +37,14 @@ function PublicRoute({ children }) {
   return children;
 }
 
+function AdminRoute({ children }) {
+  const { user, loading } = useAuth();
+
+  if (loading) return null;
+  if (user?.role !== "ADMIN") return <Navigate to="/dashboard" replace />;
+  return children;
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -50,6 +59,7 @@ function App() {
             <Route index element={<Navigate to="/dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="sightings" element={<Sightings />} />
+            <Route path="admin" element={<AdminRoute><Admin /></AdminRoute>} />
           </Route>
 
           {/* Fallback */}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 export default function Register() {
@@ -10,8 +10,6 @@ export default function Register() {
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const { signUp } = useAuth();
-  const navigate = useNavigate();
-
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
@@ -19,8 +17,7 @@ export default function Register() {
 
     try {
       await signUp(name, email, password);
-      setSuccess("Conta cadastrada com sucesso! Redirecionando para o login...");
-      setTimeout(() => navigate("/login"), 1800);
+      setSuccess("Conta criada com sucesso!");
     } catch (err) {
       setError(err.response?.data?.error || "Erro ao cadastrar");
     } finally {
@@ -31,9 +28,10 @@ export default function Register() {
   return (
     <div className="auth-page">
       <form className="auth-card" onSubmit={handleSubmit}>
-        <div className="logo-icon">👣</div>
-        <h1>Criar Conta</h1>
-        <p className="subtitle">Junte-se aos moradores de Little Ville</p>
+        <div className="logo-icon">LV</div>
+        <p className="auth-kicker">NOVO REGISTRO  /  LITTLE VILLE</p>
+        <h1>Criar conta</h1>
+        <p className="subtitle">Abra seu acesso ao arquivo coletivo de evidências.</p>
 
         {error && <div className="error-message">{error}</div>}
         {success && <div className="success-message">{success}</div>}
@@ -75,9 +73,17 @@ export default function Register() {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary" disabled={loading}>
-          {loading ? "Cadastrando..." : "Cadastrar"}
-        </button>
+        {!success && (
+          <button type="submit" className="btn btn-primary" disabled={loading}>
+            {loading ? "Cadastrando..." : "Cadastrar"}
+          </button>
+        )}
+
+        {success && (
+          <Link className="btn btn-primary" to="/login">
+            Fazer login
+          </Link>
+        )}
 
         <div className="switch-link">
           Já tem conta? <Link to="/login">Faça login</Link>

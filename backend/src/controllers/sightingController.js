@@ -74,7 +74,7 @@ export async function updateSighting(req, res) {
       return res.status(404).json({ error: "Avistamento não encontrado" });
     }
 
-    if (existing.userId !== req.userId) {
+    if (existing.userId !== req.userId && req.user.role !== "ADMIN") {
       return res.status(403).json({ error: "Você não tem permissão para editar este avistamento" });
     }
 
@@ -108,7 +108,7 @@ export async function deleteSighting(req, res) {
       return res.status(404).json({ error: "Avistamento não encontrado" });
     }
 
-    if (existing.userId !== req.userId) {
+    if (existing.userId !== req.userId && req.user.role !== "ADMIN") {
       return res.status(403).json({ error: "Você não tem permissão para deletar este avistamento" });
     }
 
