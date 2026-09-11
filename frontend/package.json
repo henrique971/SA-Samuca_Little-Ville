@@ -30,7 +30,7 @@
     "recharts": "^3.10.1"
   },
   "description": "",
-  "main": "index.js",
+  "main": "vite.config.js",
   "keywords": [],
   "author": "",
   "license": "ISC"

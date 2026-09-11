@@ -11,9 +11,12 @@ import { authMiddleware } from "../middlewares/auth.js";
 
 const router = Router();
 
-router.get("/", listSightings);
+// Rota pública — estatísticas do dashboard
 router.get("/stats", authMiddleware, getStats);
-router.get("/:id", getSighting);
+
+// Rotas protegidas — CRUD de avistamentos
+router.get("/", authMiddleware, listSightings);
+router.get("/:id", authMiddleware, getSighting);
 router.post("/", authMiddleware, createSighting);
 router.put("/:id", authMiddleware, updateSighting);
 router.delete("/:id", authMiddleware, deleteSighting);
