@@ -28,7 +28,6 @@
 | Antonio Kaue |
 | Kauany Bairros |
 | Henrique Silva |
-| Miguel Wolf |
 
 ---
 
