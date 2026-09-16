@@ -124,7 +124,7 @@ export default function Sightings() {
             {sightings.length === 0 ? (
               <tr>
                 <td colSpan="8" style={{ textAlign: "center", padding: 32, color: "var(--text-muted)" }}>
-                  Nenhum avistamento registrado. Clique em "+ Novo Avistamento" para começar! 👣
+                  Nenhum avistamento registrado. Clique em "+ Novo Avistamento" para começar! 
                 </td>
               </tr>
             ) : (
@@ -140,8 +140,8 @@ export default function Sightings() {
                   <td className="actions">
                     {canManage(s) && (
                       <>
-                        <button className="btn-edit" onClick={() => handleEdit(s)}>✏️ Editar</button>
-                        <button className="btn-delete" onClick={() => handleDelete(s.id)}>🗑️ Deletar</button>
+                        <button className="btn-edit" onClick={() => handleEdit(s)}> Editar</button>
+                        <button className="btn-delete" onClick={() => handleDelete(s.id)}> Deletar</button>
                       </>
                     )}
                   </td>
@@ -156,7 +156,7 @@ export default function Sightings() {
       {showModal && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>{editingSighting ? "✏️ Editar Avistamento" : "📌 Novo Avistamento"}</h2>
+            <h2>{editingSighting ? "✏️ Editar Avistamento" : " Novo Avistamento"}</h2>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>Título</label>

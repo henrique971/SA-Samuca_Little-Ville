@@ -197,7 +197,7 @@ export default function Dashboard() {
                       📅 {new Date(s.date).toLocaleDateString("pt-BR")}
                     </p>
                     {s.user && (
-                      <p style={{ fontSize: 11, color: "#999" }}>👤 {s.user.name}</p>
+                      <p style={{ fontSize: 11, color: "#999" }}> {s.user.name}</p>
                     )}
                   </div>
                 </Popup>
@@ -207,7 +207,7 @@ export default function Dashboard() {
             {/* Marcador do novo avistamento (verde) */}
             {newMarker && (
               <Marker position={[newMarker.lat, newMarker.lng]} icon={newMarkerIcon}>
-                <Popup>📌 Novo avistamento aqui</Popup>
+                <Popup> Novo avistamento aqui</Popup>
               </Marker>
             )}
           </MapContainer>
@@ -233,7 +233,7 @@ export default function Dashboard() {
             {sightings.length === 0 ? (
               <tr>
                 <td colSpan="5" style={{ textAlign: "center", padding: 32, color: "var(--text-muted)" }}>
-                  Nenhum avistamento registrado ainda. Clique no mapa para adicionar! 🗺️
+                  Nenhum avistamento registrado ainda. Clique no mapa para adicionar! 
                 </td>
               </tr>
             ) : (
@@ -246,8 +246,8 @@ export default function Dashboard() {
                   <td className="actions">
                     {canManage(s) && (
                       <>
-                        <button className="btn-edit" onClick={() => handleEdit(s)}>✏️ Editar</button>
-                        <button className="btn-delete" onClick={() => handleDelete(s.id)}>🗑️ Deletar</button>
+                        <button className="btn-edit" onClick={() => handleEdit(s)}> Editar</button>
+                        <button className="btn-delete" onClick={() => handleDelete(s.id)}> Deletar</button>
                       </>
                     )}
                   </td>
@@ -262,7 +262,7 @@ export default function Dashboard() {
       {showModal && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>{editingSighting ? "✏️ Editar Avistamento" : "📌 Novo Avistamento"}</h2>
+            <h2>{editingSighting ? " Editar Avistamento" : " Novo Avistamento"}</h2>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>Título</label>
