@@ -4,7 +4,7 @@ import prisma from "./src/lib/prisma.js";
 async function createAdmin() {
   try {
     const name = "Administrador";
-    const email = "admin@email.com";
+    const email = "admin@gmail.com";
     const password = "123456";
 
     const existingUser = await prisma.user.findUnique({
@@ -12,7 +12,7 @@ async function createAdmin() {
     });
 
     if (existingUser) {
-      console.log("❌ Já existe um usuário com esse e-mail.");
+      console.log(" Já existe um usuário com esse e-mail.");
       return;
     }
 
@@ -27,12 +27,12 @@ async function createAdmin() {
       },
     });
 
-    console.log("✅ Administrador criado com sucesso!");
+    console.log(" Administrador criado com sucesso!");
     console.log(`Nome: ${admin.name}`);
     console.log(`E-mail: ${admin.email}`);
     console.log(`ID: ${admin.id}`);
   } catch (error) {
-    console.error("❌ Erro ao criar administrador:", error);
+    console.error(" Erro ao criar administrador:", error);
   } finally {
     await prisma.$disconnect();
   }
