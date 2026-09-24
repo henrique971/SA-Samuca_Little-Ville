@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import Sightings from "./pages/Sightings";
 import AppLayout from "./layouts/AppLayout";
 import Admin from "./pages/Admin";
+import Welcome from "./pages/Welcome";
 
 function PrivateRoute({ children }) {
   const { signed, loading } = useAuth();
@@ -47,16 +48,17 @@ function AdminRoute({ children }) {
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
       <AuthProvider>
         <Routes>
           {/* Rotas Públicas */}
+          <Route path="/" element={<Navigate to="/welcome" replace />} />
+          <Route path="/welcome" element={<Welcome />} />
           <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
           <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
 
           {/* Rotas Protegidas */}
           <Route path="/" element={<PrivateRoute><AppLayout /></PrivateRoute>}>
-            <Route index element={<Navigate to="/dashboard" />} />
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="sightings" element={<Sightings />} />
             <Route path="admin" element={<AdminRoute><Admin /></AdminRoute>} />
